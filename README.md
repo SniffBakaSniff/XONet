@@ -26,7 +26,9 @@ Retrieves the current state of a game.
 Replace `<GameId>` with the actual game ID.
 
 ```bash
-curl -X GET http://localhost:5025/tictactoe/<GameId>
+curl -X POST http://localhost:5025/tictactoe/state \
+     -H "Content-Type: application/json" \
+     -d '{ "gameId": "<GameId>" }'
 ```
 
 Returns:
@@ -55,7 +57,9 @@ Joins an existing game as a player.
 Replace `<GameId>` with the actual game ID.
 
 ```bash
-curl -X POST http://localhost:5025/tictactoe/<GameId>/join
+curl -X POST http://localhost:5025/tictactoe/join \
+     -H "Content-Type: application/json" \
+     -d '{ "gameId": "<GameId>" }'
 ```
 
 Returns:

@@ -1,37 +1,40 @@
+public record JoinGameRequest(string GameId);
+public record MoveRequest(string GameId, string PlayerId, int X, int Y);
+
 public static class TicTacToeEndpoints
 {
     public static void MapEndpoints(this WebApplication app)
     {
         var games = app.Services.GetRequiredService<TicTacToeService>();
 
-        // create game then returns gameId + playerId
+        // Create a new game
         app.MapPost("/tictactoe/create", () =>
         {
             var game = games.CreateGame(out var playerId);
             return Results.Ok(new { game.GameId, playerId, symbol = "X" });
         });
 
-        // join game then returns playerId + assigned symbol
-        app.MapPost("/tictactoe/{gameId}/join", (string gameId) =>
+        // Join an existing game
+        app.MapPost("/tictactoe/join", (JoinGameRequest request) =>
         {
-            var (game, playerId) = games.JoinGame(gameId);
+            var (game, playerId) = games.JoinGame(request.GameId);
             return game == null || playerId == null
                 ? Results.BadRequest("Game not found or full")
                 : Results.Ok(new { game.GameId, playerId, symbol = game.Players[playerId] });
         });
 
-        // get game state
-        app.MapGet("/tictactoe/{gameId}", (string gameId) =>
+        // Get game state
+        app.MapPost("/tictactoe/state", (JoinGameRequest request) =>
         {
-            var game = games.GetGame(gameId);
+            var game = games.GetGame(request.GameId);
             return game is null ? Results.NotFound() : Results.Ok(game);
         });
 
-        // make move
-        app.MapPost("/tictactoe/{gameId}/move", (string gameId, PlayerMove move) =>
+        // Make a move
+        app.MapPost("/tictactoe/move", (MoveRequest request) =>
         {
-            var success = games.MakeMove(gameId, move.PlayerId, move.X, move.Y);
-            return success ? Results.Ok(games.GetGame(gameId)) : Results.BadRequest("Invalid move or not your turn");
+            var success = games.MakeMove(request.GameId, request.PlayerId, request.X, request.Y);
+            return success ? Results.Ok(games.GetGame(request.GameId)) : Results.BadRequest("Invalid move or not your turn");
         });
     }
 }
