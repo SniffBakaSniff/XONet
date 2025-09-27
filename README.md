@@ -26,9 +26,7 @@ Retrieves the current state of a game.
 Replace `<GameId>` with the actual game ID.
 
 ```bash
-curl -X POST http://localhost:5025/tictactoe/state \
-     -H "Content-Type: application/json" \
-     -d '{ "gameId": "<GameId>" }'
+curl -X POST http://localhost:5025/tictactoe/state -H "Content-Type: application/json" -d '{ "gameId": "<GameId>" }'
 ```
 
 Returns:
@@ -57,9 +55,7 @@ Joins an existing game as a player.
 Replace `<GameId>` with the actual game ID.
 
 ```bash
-curl -X POST http://localhost:5025/tictactoe/join \
-     -H "Content-Type: application/json" \
-     -d '{ "gameId": "<GameId>" }'
+curl -X POST http://localhost:5025/tictactoe/join -H "Content-Type: application/json" -d '{ "gameId": "<GameId>" }'
 ```
 
 Returns:
@@ -78,9 +74,7 @@ Submits a move for a player in a game.
 Replace `<GameId>` and `<PlayerId>` with actual values.
 
 ```bash
-curl -X POST http://localhost:5025/tictactoe/<GameId>/move \
-     -H "Content-Type: application/json" \
-     -d '{ "playerId": "<PlayerId>", "x": 1, "y": 1 }'
+curl -X POST http://localhost:5025/tictactoe/move -H "Content-Type: application/json" -d '{ "gameId": "<GameId>", "playerId": "<PlayerId>", "x": 1, "y": 1 }'
 ```
 
 Returns:
